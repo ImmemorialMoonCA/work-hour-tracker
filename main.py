@@ -11,7 +11,7 @@ def load_salary():
         with open(CONFIG_FILE, "r") as f:
             return float(json.load(f)["yearly_salary"])
     else:
-        salary = float(input("Yearly salary (e.g. 49500): "))
+        salary = float(input("Yearly salary (e.g. 50000): "))
         with open(CONFIG_FILE, "w") as f:
             json.dump({"yearly_salary": salary}, f)
         return salary
