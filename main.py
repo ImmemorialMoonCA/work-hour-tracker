@@ -1,8 +1,20 @@
 import csv
+import json
+import os
 from datetime import datetime
 
-# Constants
 WORKDAYS_PER_YEAR = 260
+CONFIG_FILE = "config.json"
+
+def load_salary():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as f:
+            return float(json.load(f)["yearly_salary"])
+    else:
+        salary = float(input("Yearly salary (e.g. 49500): "))
+        with open(CONFIG_FILE, "w") as f:
+            json.dump({"yearly_salary": salary}, f)
+        return salary
 
 def parse_time(time_str):
     return datetime.strptime(time_str, "%H:%M")
@@ -14,9 +26,10 @@ def calculate_net_hours(start, end, took_lunch):
     return round(total_hours, 2)
 
 def main():
-    print("🔧 Work Hour Tracker (Salary-Based Edition)\n")
-    yearly_salary = float(input("Yearly salary (e.g. 49500): "))
-    daily_salary = round(yearly_salary / WORKDAYS_PER_YEAR, 2)
+    print("🔧 Work Hour Tracker (Salary-Based)\n")
+
+    salary = load_salary()
+    daily_salary = round(salary / WORKDAYS_PER_YEAR, 2)
     print(f"Daily salary based on 260 days/year: ${daily_salary:.2f}")
 
     date = input("Date (YYYY-MM-DD): ")
